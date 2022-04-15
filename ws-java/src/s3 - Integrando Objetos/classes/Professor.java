@@ -1,12 +1,14 @@
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Collections;
+package classes;
+
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public class Professor {
 
     protected String nome;
     protected String contrato;
-    protected Set<String> disciplinas = new HashSet<String>();
+    
+    protected SortedSet<String> disciplinas = new TreeSet<String>();
 
     public Professor(String nome, String contrato, String[] disciplinas) {
         this.nome = nome;
@@ -14,16 +16,18 @@ public class Professor {
 
         for (String disciplina : disciplinas)
             this.disciplinas.add(disciplina);
-        ordenarDisciplinas();
-    }
-    
-    private void ordenarDisciplinas() {
-        Collections.sort(this.disciplinas);
     }
 
+    public String getNome() {
+        return this.nome;
+    }
+
+    public SortedSet<String> getDisciplinas() {
+        return this.disciplinas;
+    }
+    
     public void adicionarDisciplina(String disciplina) {
         this.disciplinas.add(disciplina);
-        ordenarDisciplinas();        
     }
 
     public void removerDisciplina(String disciplina) {
