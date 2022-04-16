@@ -53,22 +53,22 @@ public class Curso {
         return new Turma("Undefined"); 
     }
 
-    public void listarAlunosMatriculados() {
-        System.out.println("================ Alunos Matriculados ================");
+    public void listarAlunosMatriculados() {   
+        System.out.println("=================== Alunos Matriculados ===================");
         for (Aluno aluno : this.alunos)
-            System.out.format("Nome: %s\n", aluno.getNome());
+            System.out.format("\tNome: %s\n", aluno.getNome());
     }
 
     public void listarAlunosEgressos() {
-        System.out.println("================ Alunos Egressos ================");
-        for (Aluno alunoEgresso : this.alunosEgressos) 
-            System.out.format("Nome: %s\n", alunoEgresso.getNome());
+        System.out.println("===================== Alunos Egressos =====================");
+        for (Aluno alunoEgresso : this.alunosEgressos)
+            System.out.format("\tNome: %s\n", alunoEgresso.getNome());
     }
     
     public void listarAlunosCancelados() {       
-        System.out.println("================ Alunos Cancelados ================");
+        System.out.println("==================== Alunos Cancelados ====================");
         for (Aluno alunoCancelado : this.alunosCancelados) 
-            System.out.format("Nome: %s\n", alunoCancelado.getNome());
+            System.out.format("\tNome: %s\n", alunoCancelado.getNome());
     }   
 
     public void listarTodosAlunos() {
@@ -78,9 +78,9 @@ public class Curso {
     }
 
     public void listarProfessores() {
-        System.out.println("================ Professores Ativos ================");
+        System.out.println("==================== Professores Ativos ====================");
         for (Professor professor : this.professores) 
-             System.out.format("Nome: %s\n", professor.getNome());
+             System.out.format("\tNome: %s\n", professor.getNome());
         
     }
 
@@ -139,7 +139,7 @@ public class Curso {
         if (encontrarAlunoEgresso(aluno.getNome(), aluno.getMatricula())) return new Aluno("Aluno já egresso");
         if(!encontrarAlunoMatriculado(aluno.getNome(), aluno.getMatricula())) return new Aluno("Aluno não matriculado");
             
-        this.alunosEgressos.add(new Aluno('.' + aluno.getNome(), aluno.getMatricula(), aluno.getNotas()));
+        this.alunosEgressos.add(new Aluno(aluno.getNome(), aluno.getNotas()));
         this.alunos.remove(aluno);
         return aluno;
             

@@ -6,60 +6,63 @@ import java.time.LocalDate;
 public class Aluno {
 
     protected String matricula;
-    private static int contadorMatricula = 1;
-    private static int contadorEgresso = 1;
-
+    private static int contadorMatricula = 10;
     protected String nome;
     protected DateType dataNascimento;
     protected double[] notas = new double[5];
     
-    public Aluno(String nome, DateType dataNascimento, double[] notas) {
-        //todo: Inserir alunos de exemplo
+    public Aluno(String prefixoMatricula, String nome, DateType dataNascimento, double[] notas) { //todo: Inserir alunos de exemplo
 
-        //* IDENTIFICAR ALUNOS EGRESSANTES POR UM "." (PONTO) NO INÍCIO DA STRING --> Manter Matrículas Diferentes
-        // Exemplo: ".Jorel"
-        if (nome.indexOf('.') == 0) {
-            this.matricula = "40" + contadorEgresso;
-            contadorEgresso++;
-        } else {
-            this.matricula = "2150" + contadorMatricula;
-            contadorMatricula++;
-        }
-        
+        this.matricula = prefixoMatricula + contadorMatricula;
+        contadorMatricula++;
+
         this.nome = nome;
         this.dataNascimento = dataNascimento;
 
+        validarNotasParams(notas);
+        this.notas = notas;
+    }
+    
+    public Aluno(String nome, DateType dataNascimento, double[] notas) { //todo: Inserir alunos egressos de exemplo   
+        this.nome = nome;
+        this.dataNascimento = dataNascimento;
+
+        validarNotasParams(notas);
+        this.notas = notas;
+    }
+
+    public Aluno(String prefixoMatricula, String nome, DateType dataNascimento) {  //todo: Matricular novo aluno
+       
+        this.matricula = prefixoMatricula + contadorMatricula;
+        contadorMatricula++;
+
+        this.nome = nome;
+        this.dataNascimento = dataNascimento;
+    }
+    
+    public Aluno(String matricula, String nome) { //todo: Buscar aluno a ser cancelado/tornado egresso
+        this.matricula = matricula;
+        this.nome = nome;
+    }
+
+    public Aluno(String nome, double[] notas) {  //todo: Tornar Aluno Egresso e Cancelar Aluno
+        this.nome = nome;
+        validarNotasParams(notas);
+        this.notas = notas;
+    }
+
+    protected Aluno(String undefined) {  //todo: Retornar Aluno Vazio (Buscas)
+       
+        this.nome = undefined;
+    }
+
+    private void validarNotasParams(double[] notas) {
         if (notas.length < 5)
             throw new Error("Devem ser passadas 5 notas...");
         for (double nota : notas) {
             if (nota < 0 || nota > 10)
                 throw new Error("Nota informada inválida...");
         }
-        this.notas = notas;
-    }
-    
-    public Aluno(String nome, DateType dataNascimento) {
-        //todo: Matricular novo aluno
-        this.nome = nome;
-        this.dataNascimento = dataNascimento;
-    }
-    
-    public Aluno(String nome, String matricula, double[] notas) {
-        //todo: Tornar Aluno Egresso
-        this.nome = nome;
-        this.matricula = matricula;
-        this.notas = notas;
-    }
-    
-    public Aluno(String nome, double[] notas) {
-        //todo: Cancelar Aluno
-        this.nome = nome;
-        this.notas = notas;
-    }
-
-    protected Aluno(String undefined) {
-        //todo: Retornar Aluno Vazio (Buscas)
-        this.nome = undefined;
     }
 
     private int calcularAjusteDia(int diaAtual) {
