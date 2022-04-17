@@ -50,7 +50,7 @@ public class Curso {
             if (turma.getNome() == nomeTurma)
                 return turma;
         }
-        return new Turma("Undefined"); 
+        return null; 
     }
 
     public void listarAlunosMatriculados() {   
@@ -92,8 +92,8 @@ public class Curso {
     }
 
     public Aluno matricularAluno(Aluno aluno) {
-        // if(this.alunos.contains(aluno)) return; --> desnecessário (Set<Aluno>)
         this.alunos.add(aluno);
+
         return aluno;
     }
 
@@ -102,15 +102,15 @@ public class Curso {
         return professor;
     }
 
-    private boolean encontrarAlunoMatriculado(String nomeAluno, String matricula) {
+    private Aluno encontrarAlunoMatriculado(String matricula, String nomeAluno) {
         for (Aluno aluno : this.alunos) {
             if (aluno.getNome().compareTo(nomeAluno) == 0) {
                 if (aluno.getMatricula().compareTo(matricula) == 0) {
-                    return true;
+                    return aluno;
                 }
             }
         }
-        return false;
+        return null;
     }
 
     private boolean encontrarAlunoEgresso(String nomeAluno, String matricula) {
@@ -135,25 +135,43 @@ public class Curso {
         return false;
     }
 
-    public Aluno tornarAlunoEgresso(Aluno aluno) {
-        if (encontrarAlunoEgresso(aluno.getNome(), aluno.getMatricula())) return null;
-        if (!encontrarAlunoMatriculado(aluno.getNome(), aluno.getMatricula()))
-            return null;
+    private Aluno removerAlunoDaTurma(String nomeAluno, String matricula) {
+        Aluno cancelado = encontrarAlunoMatriculado(nomeAluno, matricula);
+        if (cancelado == null)
+            throw new Error("Aluno a ser cancelado não está matriculado...");
+
+        for (Turma turma : this.turmas) {
+            if (turma.getNome().compareTo(cancelado.getNomeTurma()) == 0) {
+                turma.removerAluno(cancelado);
+                break;
+            }
+        }
+        return cancelado;
+    }
+
+    private Aluno removerAlunoDoCurso(Aluno alunoCancelado) {
+        this.alunosCancelados.add(new Aluno(alunoCancelado.getNome(), alunoCancelado.getNotas()));
+        this.alunos.remove(alunoCancelado);
+
+        return alunoCancelado;
+    }
+    
+    public Aluno tornarAlunoEgresso(String nomeAluno, String matricula) {
+        if (encontrarAlunoEgresso(nomeAluno, matricula)) return null;
             
-        this.alunosEgressos.add(new Aluno(aluno.getNome(), aluno.getNotas()));
-        this.alunos.remove(aluno);
-        return aluno;
+        Aluno egresso = removerAlunoDaTurma(nomeAluno, matricula);
+        this.alunosEgressos.add(new Aluno(egresso.getNome(), egresso.getNotas()));
+        this.alunos.remove(egresso);
+        return egresso;
             
     }
     
-    public Aluno cancelarAluno(Aluno aluno) {
-        if (encontrarAlunoCancelado(aluno.getNome(), aluno.getMatricula()))
-            return null;
-        if (!encontrarAlunoMatriculado(aluno.getNome(), aluno.getMatricula()))
-            return null;         
-        this.alunosCancelados.add(new Aluno(aluno.getNome(), aluno.getNotas()));
-        this.alunos.remove(aluno);
-        return aluno;
+    public Aluno cancelarAluno(String nomeAluno, String matricula) {
+        if (encontrarAlunoCancelado(nomeAluno, matricula)) return null;
+
+        Aluno cancelado = removerAlunoDaTurma(nomeAluno, matricula);
+        return removerAlunoDoCurso(cancelado);
+        
     }
         
 }

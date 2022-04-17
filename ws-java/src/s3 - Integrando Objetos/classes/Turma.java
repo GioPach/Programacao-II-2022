@@ -22,10 +22,6 @@ public class Turma {
             this.disciplinas.add(disciplina);
     }
 
-    protected Turma(String undefined) {
-        this.nome = undefined;
-    }
-
     public String getNome() {
         return this.nome;
     }
@@ -42,8 +38,12 @@ public class Turma {
         return this.disciplinas;
     }
 
-    public void matricular(Aluno aluno) {
+    public void matricularAluno(Aluno aluno) {
         this.alunos.add(aluno);
+    }
+
+    public void removerAluno(Aluno aluno) {
+        this.alunos.remove(aluno);
     }
 
     public void adicionarDisciplina(String disciplina) {

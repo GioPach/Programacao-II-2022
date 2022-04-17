@@ -1,5 +1,6 @@
 package classes;
 
+import enums.PrefixoTurmas;
 import uteis.DateType;
 import java.time.LocalDate;
 
@@ -8,11 +9,12 @@ public class Aluno {
     protected String matricula;
     private static int contadorMatricula = 10;
     protected String nome;
+    protected String nomeTurma;
     protected DateType dataNascimento;
     protected double[] notas = new double[5];
     
     public Aluno(String prefixoMatricula, String nome, DateType dataNascimento, double[] notas) { //todo: Inserir alunos de exemplo
-
+        setNomeTurma(prefixoMatricula);
         this.matricula = prefixoMatricula + contadorMatricula;
         contadorMatricula++;
 
@@ -32,7 +34,7 @@ public class Aluno {
     }
 
     public Aluno(String prefixoMatricula, String nome, DateType dataNascimento) {  //todo: Matricular novo aluno
-       
+        setNomeTurma(prefixoMatricula);
         this.matricula = prefixoMatricula + contadorMatricula;
         contadorMatricula++;
 
@@ -45,12 +47,12 @@ public class Aluno {
         this.nome = nome;
     }
 
-    public Aluno(String nome, double[] notas) {  //todo: Tornar Aluno Egresso e Cancelar Aluno
+    protected Aluno(String nome, double[] notas) { //todo: Tornar Aluno Egresso e Cancelar Aluno
         this.nome = nome;
         validarNotasParams(notas);
         this.notas = notas;
     }
-
+ 
     private void validarNotasParams(double[] notas) {
         if (notas.length < 5)
             throw new Error("Devem ser passadas 5 notas...");
@@ -62,6 +64,21 @@ public class Aluno {
     
     public String getNome() {
         return this.nome;
+    }
+
+    public String getNomeTurma() {
+        return this.nomeTurma;
+    }
+
+    private void setNomeTurma(String prefixoMatricula) {
+        for (PrefixoTurmas prefixoCadastrado : PrefixoTurmas.values()) {
+            if (prefixoMatricula.compareTo(prefixoCadastrado.getPrefixoMatricula()) == 0) {
+                this.nomeTurma = prefixoCadastrado.getNomeTurma();
+                break;
+            }
+        }
+        if (this.nomeTurma == null)
+            throw new Error("Prefixo informado inválido...");
     }
 
     public String getMatricula() {
