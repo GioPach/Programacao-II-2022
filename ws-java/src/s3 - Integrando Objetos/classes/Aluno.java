@@ -51,7 +51,7 @@ public class Aluno {
         this.notas = notas;
     }
 
-     private void validarNotasParams(double[] notas) {
+    private void validarNotasParams(double[] notas) {
         if (notas.length < 5)
             throw new Error("Devem ser passadas 5 notas...");
         for (double nota : notas) {
@@ -59,23 +59,7 @@ public class Aluno {
                 throw new Error("Nota informada inválida...");
         }
     }
-
-    private int calcularAjusteDia(int diaAtual) {
-        if (this.dataNascimento.getDia() - diaAtual <= 0)
-            return 0;
-        else
-            return -1;
-    }
     
-    private int calcularAjusteIdade(LocalDate dataAtual) {
-        if (this.dataNascimento.getMes() - dataAtual.getMonthValue() < 0)
-        return 0;
-        else if (this.dataNascimento.getMes() - dataAtual.getMonthValue() == 0)
-            return calcularAjusteDia(dataAtual.getDayOfMonth());
-        else 
-            return -1;        
-    }
-
     public String getNome() {
         return this.nome;
     }
@@ -85,22 +69,33 @@ public class Aluno {
     }
 
     public String getDataNascimento() {
-        if (this.dataNascimento == null)
-            return "Undefined";
         return String.format("%d/%d/%d", this.dataNascimento.getDia(), this.dataNascimento.getMes(),
                 this.dataNascimento.getAno());
     }
     
     public double[] getNotas() {
-        if (this.notas == null)
-            return new double[] {0.0};
         return this.notas;
     }
     
+    private int calcularAjusteDia(int diaAtual) {
+        if (this.dataNascimento.getDia() - diaAtual <= 0)
+            return 0;
+        else
+            return -1;
+    }
+        
+    private int calcularAjusteIdade(LocalDate dataAtual) {
+        if (this.dataNascimento.getMes() - dataAtual.getMonthValue() < 0) return 0;
+        else if (this.dataNascimento.getMes() - dataAtual.getMonthValue() == 0)
+            return calcularAjusteDia(dataAtual.getDayOfMonth());
+        else 
+            return -1;        
+    }
+        
     public int calcularIdade() {
         LocalDate currentDate = LocalDate.now();
         int idade = currentDate.getYear() - this.dataNascimento.getAno();
-        
+            
         return idade + calcularAjusteIdade(currentDate);
 
     }

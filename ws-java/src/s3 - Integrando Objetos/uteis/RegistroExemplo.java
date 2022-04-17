@@ -32,11 +32,12 @@ public class RegistroExemplo {
 
     private Aluno[] registrarAlunosEgressosExemplo() {
 
-        Aluno[] alunosEgressos = new Aluno[3];
+        Aluno[] alunosEgressos = new Aluno[4];
 
         alunosEgressos[0] = new Aluno("Joel", new DateType(3, 2, 2003), new double[] { 9.6, 9.2, 8.7, 8.3, 8.9 });
-        alunosEgressos[1] = new Aluno("Ronaldo", new DateType(5, 6, 2004), new double[] { 9.6, 8.2, 9.4, 9.3, 10.0 });
-        alunosEgressos[2] = new Aluno("Messi", new DateType(15, 4, 2004), new double[] { 7.3, 5.2, 6.9, 8.4, 8.6 });
+        alunosEgressos[1] = new Aluno("Godofredo", new DateType(5, 6, 2004), new double[] { 9.6, 8.2, 9.4, 9.3, 10.0 });
+        alunosEgressos[2] = new Aluno("Agnácio", new DateType(15, 4, 2004), new double[] { 7.3, 5.2, 6.9, 8.4, 8.6 });
+        alunosEgressos[3] = new Aluno("Nastácia", new DateType(19, 11, 2003), new double[] { 9.6, 8.5, 8.9, 9.2, 9.5 });
 
         return alunosEgressos;
 
