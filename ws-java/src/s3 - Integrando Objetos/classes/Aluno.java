@@ -51,12 +51,7 @@ public class Aluno {
         this.notas = notas;
     }
 
-    protected Aluno(String undefined) {  //todo: Retornar Aluno Vazio (Buscas)
-       
-        this.nome = undefined;
-    }
-
-    private void validarNotasParams(double[] notas) {
+     private void validarNotasParams(double[] notas) {
         if (notas.length < 5)
             throw new Error("Devem ser passadas 5 notas...");
         for (double nota : notas) {

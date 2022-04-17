@@ -136,8 +136,9 @@ public class Curso {
     }
 
     public Aluno tornarAlunoEgresso(Aluno aluno) {
-        if (encontrarAlunoEgresso(aluno.getNome(), aluno.getMatricula())) return new Aluno("Aluno já egresso");
-        if(!encontrarAlunoMatriculado(aluno.getNome(), aluno.getMatricula())) return new Aluno("Aluno não matriculado");
+        if (encontrarAlunoEgresso(aluno.getNome(), aluno.getMatricula())) return null;
+        if (!encontrarAlunoMatriculado(aluno.getNome(), aluno.getMatricula()))
+            return null;
             
         this.alunosEgressos.add(new Aluno(aluno.getNome(), aluno.getNotas()));
         this.alunos.remove(aluno);
@@ -146,9 +147,10 @@ public class Curso {
     }
     
     public Aluno cancelarAluno(Aluno aluno) {
-        if (encontrarAlunoCancelado(aluno.getNome(), aluno.getMatricula())) return new Aluno("Aluno já cancelado");
-        if(!encontrarAlunoMatriculado(aluno.getNome(), aluno.getMatricula())) return new Aluno("Aluno não matriculado");
-           
+        if (encontrarAlunoCancelado(aluno.getNome(), aluno.getMatricula()))
+            return null;
+        if (!encontrarAlunoMatriculado(aluno.getNome(), aluno.getMatricula()))
+            return null;         
         this.alunosCancelados.add(new Aluno(aluno.getNome(), aluno.getNotas()));
         this.alunos.remove(aluno);
         return aluno;
