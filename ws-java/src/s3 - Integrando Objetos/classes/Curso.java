@@ -138,7 +138,7 @@ public class Curso {
     private Aluno removerAlunoDaTurma(String nomeAluno, String matricula) {
         Aluno cancelado = encontrarAlunoMatriculado(nomeAluno, matricula);
         if (cancelado == null)
-            throw new Error("Aluno a ser cancelado não está matriculado...");
+            throw new Error("Aluno a ser modificado não está matriculado...");
 
         for (Turma turma : this.turmas) {
             if (turma.getNome().compareTo(cancelado.getNomeTurma()) == 0) {
