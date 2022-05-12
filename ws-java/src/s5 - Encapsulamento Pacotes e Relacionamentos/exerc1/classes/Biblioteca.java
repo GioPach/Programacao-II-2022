@@ -1,9 +1,10 @@
 package exerc1.classes;
 
-import java.util.Set;
-
 import utils.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.Set;
 import java.util.HashSet;
 
 public class Biblioteca {
@@ -11,6 +12,7 @@ public class Biblioteca {
     private static int sequenciaIdAssociados = 0;
     private static int sequenciaIdLivros = 0;
     private static int sequenciaIdEmprestimos = 0;
+    private static int idUltimoLivro = 0;
     
     private Set<Pessoa> associados = new HashSet<Pessoa>();
     private Set<Livro> livrosDisponiveis = new HashSet<Livro>();
@@ -21,14 +23,16 @@ public class Biblioteca {
 
     public Biblioteca(Set<Pessoa> associados, Set<Livro> livrosDisponiveis) {
         for (Pessoa associado : associados) {
-            associado.id = sequenciaIdAssociados++;
+            associado.setId(sequenciaIdAssociados++);
+            associado.setBibliotecaAssociada(this);
+            this.associados.add(associado);
         }
-        this.associados = associados;
         
         for (Livro livro : livrosDisponiveis) {
-            livro.id = sequenciaIdLivros++;
+            livro.setId(sequenciaIdLivros++);
+            this.livrosDisponiveis.add(livro);
+            idUltimoLivro++;
         }
-        this.livrosDisponiveis = livrosDisponiveis;
     }
 
     /**************** Getters ****************/
@@ -37,9 +41,9 @@ public class Biblioteca {
         return this.associados;
     }
 
-    public Pessoa getAssociado(int id) {
+    public Pessoa getAssociadoPeloNome(String nome) {
         for(Pessoa associado : this.associados) {
-            if(associado.getId() == id) return associado;
+            if(associado.getNome().equalsIgnoreCase(nome)) return associado;
         }
         return null;
     }
@@ -82,7 +86,8 @@ public class Biblioteca {
         this.associados.remove(associado);
     }
 
-    public void imprimirAssociados() {
+    public void listarAssociados() {
+                
         System.out.println("\n=-=-=-=-=-=-=-=-=- Associdos =-=-=-=-=-=-=-=-=-");
         for(Pessoa associado : this.associados) System.out.format("ID: %d |\tNome: %s\n", associado.getId(), associado.getNome());
         System.out.println();
@@ -90,20 +95,22 @@ public class Biblioteca {
 
     //* Livros
 
-    public void imprimirLivrosDisponiveis() {
+    public void listarLivrosDisponiveis() {
+        
         System.out.println("\n=-=-=-=- Livros Disponíveis =-=-=-=-");
         for(Livro livro : this.livrosDisponiveis) System.out.format("ID: %d |\tNome: %s\n", livro.getId(), livro.getNome());
         System.out.println();
     }
 
-    public void imprimirLivrosEmprestados() {
+    public void listarLivrosEmprestados() {
+       
         System.out.println("\n=-=-=-=- Livros Emprestados =-=-=-=-");
         for(Livro livro : this.livrosEmprestados) System.out.format("ID: %d |\tNome: %s\n", livro.getId(), livro.getNome());
         System.out.println();
     }
 
     public void addLivro(Livro livro) {
-        livro.setId(this.livrosDisponiveis.size()); //obter ultima posição + 1
+        livro.setId(idUltimoLivro);
         this.livrosDisponiveis.add(livro);
     }
 
@@ -128,13 +135,17 @@ public class Biblioteca {
     
     //* Criar empréstimo
 
-    public void imprimirEmprestimos() {
+    public void listarEmprestimos() {
         
         System.out.println("=-=-=-=-=-=-= Empréstimos =-=-=-=-=-=-=\n");
         for(Emprestimo emprestimo : this.emprestimos) {
-            System.out.format("* Código do empréstimo: %d\n", emprestimo.getId());
-            System.out.format("Receptor: %s | Título do livro: %s | Autor do livro: %s\n", 
-                emprestimo.getReceptor().getNome(), emprestimo.getLivro().getNome(), emprestimo.getLivro().getAutor());
+            System.out.format("--------- Código do empréstimo: %d ---------\n", emprestimo.getId());
+            System.out.format("Receptor: %s\nTítulo do livro: %s\nAutor do livro: %s", 
+                    emprestimo.getReceptor().getNome(), emprestimo.getLivro().getNome(),
+                    emprestimo.getLivro().getAutor());
+            System.out.format("\nData do empréstimo: %s\nData de devolução: %s\n", 
+                    emprestimo.getDataEmprestimo().verData(), emprestimo.getDataDevolucao().verData());
+            System.out.format("-------------------------------------------\n\n");
         }
         System.out.println("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
     }
@@ -148,7 +159,6 @@ public class Biblioteca {
         for (Livro livro : this.livrosDisponiveis) {
             if (livro.getNome().equalsIgnoreCase(livroSolicitado.getNome())) {
                 if (livro.getAutor().equalsIgnoreCase(livroSolicitado.getAutor())) {
-                    moverLivroEmprestado(livroSolicitado);
                     return livro;
                 }
             }
@@ -158,7 +168,7 @@ public class Biblioteca {
 
     }
 
-    private void concluirEmprestimo(Pessoa receptor, Livro livroSolicitado) {
+    private void criarEmprestimo(Pessoa receptor, Livro livroSolicitado) {
         final Data dataEmprestimo = Data.obterDataAtual();
         final Emprestimo emprestimo = new Emprestimo(receptor, livroSolicitado, dataEmprestimo, definirDataDevolucao(dataEmprestimo));
         
@@ -171,7 +181,8 @@ public class Biblioteca {
         Livro livroEmprestimo = encontrarLivro(livroSolicitado);
 
         if (livroEmprestimo != null) {
-            concluirEmprestimo(receptor, livroSolicitado);
+            moverLivroEmprestado(livroEmprestimo);
+            criarEmprestimo(receptor, livroSolicitado);
             System.out.println("\nEmpréstimo realizado com sucesso.");
         } 
         else {
@@ -206,6 +217,17 @@ public class Biblioteca {
         }
         return null;
     }
+
+    private void removerEmprestimo(Pessoa receptor, Livro livroEmprestado) {
+        for (Emprestimo emprestimo : this.emprestimos) {
+            if (emprestimo.getReceptor() == receptor) {
+                if (emprestimo.getLivro() == livroEmprestado) {
+                    this.emprestimos.remove(emprestimo);
+                    return;
+                }
+            }
+        }
+    }
     
     public void fecharEmprestimo(Pessoa receptor, Livro livroEmprestado) {
 
@@ -219,7 +241,8 @@ public class Biblioteca {
         }
 
         moverLivroDevolvido(livroEmprestado);
-        System.out.println("Livro devolvido.");
+        removerEmprestimo(receptor, livroEmprestado);
+        System.out.println("\nLivro devolvido.");
 
     }
 

@@ -11,19 +11,27 @@ public class Main {
     public static void main(String...args) {
 
         Biblioteca machadoDeAssis = RegistroTeste.criarBiblioteca();
-        
+
         Pessoa yoda = new Pessoa("Yoda Dagobah", 100, machadoDeAssis);
-        machadoDeAssis.imprimirAssociados();
+        machadoDeAssis.listarAssociados();
 
         yoda.solicitarEmprestimo(machadoDeAssis.getLivroDisponivel("100 endgames you must know", "Jesus de La Villa"));
-        yoda.imprimirLivros();
+        yoda.listarLivros();
 
-        Pessoa agnacio = machadoDeAssis.getAssociado(0);
-        agnacio.solicitarEmprestimo(machadoDeAssis.getLivroDisponivel("Cosmos", "Carl Sagan"));
+        machadoDeAssis.getAssociadoPeloNome("Pedra Pedroso")
+                .solicitarEmprestimo(machadoDeAssis.getLivroDisponivel("Cosmos", "Carl Sagan"));
+        machadoDeAssis.getAssociadoPeloNome("Pedra Pedroso").listarLivros();
 
         machadoDeAssis.addLivro(new Livro("Viva la vida", "Frank Osbourn", "Ficção", new Data(1, 2, 2000)));
-        machadoDeAssis.imprimirLivrosDisponiveis();
-        machadoDeAssis.imprimirEmprestimos();
+        machadoDeAssis.listarLivrosDisponiveis();
+        machadoDeAssis.listarEmprestimos();
+
+        // yoda.devolverLivro("Cosmos"); // Cosmos foi emprestado ao Agnácio
+        yoda.devolverLivro("100 endgames you must know");
+        machadoDeAssis.listarLivrosDisponiveis();
+        machadoDeAssis.listarLivrosEmprestados();
+        yoda.listarLivros();
+
     }
 
 }

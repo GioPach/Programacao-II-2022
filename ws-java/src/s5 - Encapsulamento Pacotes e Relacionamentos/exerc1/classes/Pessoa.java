@@ -70,9 +70,12 @@ public class Pessoa {
 
     /** Métodos **/
 
-    public void imprimirLivros() {
-        
-        System.out.format("\n=-=-=-=- Livros pegos emprestado por %s =-=-=-=-\n", this.getNome());
+    public void listarLivros() {
+        if (this.livros.size() == 0) {
+            System.out.format("Nenhum livro emprestado a %s.\n", this.getNome());
+            return;
+        }
+        System.out.format("\n=-=-=-=- Livros emprestados para %s =-=-=-=-\n", this.getNome());
         for(Livro livro : this.livros) System.out.format("Nome: %s | Autor: %s\n", livro.getNome(), livro.getAutor());
         
     }
@@ -100,9 +103,12 @@ public class Pessoa {
         for (Livro livro : this.livros) {
             if (livro.getNome().equalsIgnoreCase(nome)) {
                 this.bibliotecaAssociada.fecharEmprestimo(this, livro);
-                break;
+                this.livros.remove(livro);
+                return;
             }
         }
+
+        System.out.format("O livro \"%s\" não foi emprestado a %s.\n", nome, this.getNome());
 
     }
     

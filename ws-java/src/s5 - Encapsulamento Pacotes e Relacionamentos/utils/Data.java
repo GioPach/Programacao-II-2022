@@ -189,7 +189,7 @@ public class Data {
         final int corretor = 1;
 
         Date dataFinal = new Date(data.getAno(), data.getMes() - corretor, data.getDia());
-        
+
         Calendar cal = Calendar.getInstance();
         cal.setTime(dataFinal);
         cal.add(Calendar.DATE, nDias);
@@ -197,9 +197,9 @@ public class Data {
 
         return new Data(dataFinal.getDate(), dataFinal.getMonth() + corretor, dataFinal.getYear());
     }
-
-    public void verData() {
-        System.out.format("%02d/%02d/%04d\n", this.dia, this.mes, this.ano);
+    
+    public String verData() {
+        return String.format("%02d/%02d/%04d", this.dia, this.mes, this.ano);
     }
 
 }
