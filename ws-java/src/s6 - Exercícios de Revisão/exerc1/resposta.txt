@@ -1,0 +1,13 @@
+class Teste {
+
+	int x = 37;
+	
+	public static void main(String [] args) {
+		System.out.println(x);	
+	}
+}
+
+
+=> O código não compila em virtude da inexistência de uma variável "x" no escopo local 
+do método "main". Com a finalidade de imprimir o número 37, deve-se utilizar a palavra 
+reservada "this" para referenciar o atributo correspondente da classe.
