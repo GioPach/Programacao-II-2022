@@ -1,7 +1,7 @@
 package utils;
 
-import java.util.List;
-import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class VerificadorValidade {
 
@@ -39,14 +39,13 @@ public class VerificadorValidade {
      */
     public static boolean verificarNumeroNaString(String string) {
 
-        List<Character> digitos = Arrays.asList('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
-        char[] caracteres = string.toCharArray();
-        for (char caractere : caracteres) {
-            if (digitos.contains(caractere))
-                return true;
-        }
+        Pattern digitos = Pattern.compile("[0-9]");
+        Matcher matcher = digitos.matcher(string);
 
-        return false;
+        if (matcher.find())
+            return true;
+        else
+            return false;
 
     }
 
@@ -84,11 +83,47 @@ public class VerificadorValidade {
      * @param nome
      * @return o próprio número ou gera exceção.
      */
-    public static int validarNumeroNatural(int numero) {
+     public static int validarNumeroNatural(int numero) {
 
-        if(numero < 0) throw new Error("O número deve ser maior que 0");
-        else return numero;
+         if (numero < 0)
+             throw new Error("O número deve ser maior que 0");
+         else
+             return numero;
 
+    }
+    
+    // Número de Telefone
+    public static String validarTelefone(String telefone) {
+        final String msgErro = "Número de telefone inválido";
+
+        if (telefone.length() < 9 || telefone.length() > 10)
+            throw new Error(msgErro);
+        if (telefone.length() == 10 && telefone.charAt(0) != '9')
+            throw new Error(msgErro);
+
+        Pattern regexTelefone = Pattern.compile("9?\\d\\d\\d\\d-\\d\\d\\d\\d");
+        Matcher matcher = regexTelefone.matcher(telefone);
+
+        if (matcher.find())
+            return telefone;
+        else 
+            throw new Error(msgErro);
+
+    }
+
+    public static String validarCpf(String cpf) {
+        final String msgErro = "CPF inválido...";
+
+        if (cpf.length() != 14)
+            throw new Error(msgErro);
+
+        Pattern regexCpf = Pattern.compile("\\d\\d\\d.\\d\\d\\d.\\d\\d\\d-\\d\\d");
+        Matcher matcher = regexCpf.matcher(cpf);
+
+        if(matcher.find()) 
+            return cpf;
+        else 
+            throw new Error(msgErro);
     }
 
 }
