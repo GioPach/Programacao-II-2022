@@ -25,7 +25,7 @@ public class Contato {
     }
 
     public void setTelefone(String telefone) {
-        this.telefone = telefone;
+        this.telefone = VerificadorValidade.validarTelefone(telefone);
     }
 
 }

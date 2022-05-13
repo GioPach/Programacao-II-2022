@@ -2,8 +2,6 @@ package exerc1.classes;
 
 import utils.*;
 
-import java.util.List;
-import java.util.stream.Collectors;
 import java.util.Set;
 import java.util.HashSet;
 
@@ -75,7 +73,7 @@ public class Biblioteca {
 
     /**************** Métodos ****************/
 
-    //* Associados
+    //* Adicionar e Remover Elementos
 
     public void addAssociado(Pessoa associado) {
         associado.setId(this.associados.size()); //obter ultima posição + 1
@@ -86,29 +84,7 @@ public class Biblioteca {
         this.associados.remove(associado);
     }
 
-    public void listarAssociados() {
-                
-        System.out.println("\n=-=-=-=-=-=-=-=-=- Associdos =-=-=-=-=-=-=-=-=-");
-        for(Pessoa associado : this.associados) System.out.format("ID: %d |\tNome: %s\n", associado.getId(), associado.getNome());
-        System.out.println();
-    }
-
-    //* Livros
-
-    public void listarLivrosDisponiveis() {
-        
-        System.out.println("\n=-=-=-=- Livros Disponíveis =-=-=-=-");
-        for(Livro livro : this.livrosDisponiveis) System.out.format("ID: %d |\tNome: %s\n", livro.getId(), livro.getNome());
-        System.out.println();
-    }
-
-    public void listarLivrosEmprestados() {
-       
-        System.out.println("\n=-=-=-=- Livros Emprestados =-=-=-=-");
-        for(Livro livro : this.livrosEmprestados) System.out.format("ID: %d |\tNome: %s\n", livro.getId(), livro.getNome());
-        System.out.println();
-    }
-
+    
     public void addLivro(Livro livro) {
         livro.setId(idUltimoLivro);
         this.livrosDisponiveis.add(livro);
@@ -123,39 +99,48 @@ public class Biblioteca {
         }
     }
 
-    private void moverLivroEmprestado(Livro livroEmprestimo) {
-        this.livrosEmprestados.add(livroEmprestimo);
-        this.livrosDisponiveis.remove(livroEmprestimo);
+    //* Tarefas de Listagem
+
+    public void listarAssociados() {                
+        System.out.println("\n=-=-=-=-=-=-=-=-=- Associdos =-=-=-=-=-=-=-=-=-");
+        for(Pessoa associado : this.associados) System.out.format("ID: %d |\tNome: %s\n", associado.getId(), associado.getNome());
+        System.out.println();
     }
 
-    private void moverLivroDevolvido(Livro livroDevolvido) {
-        this.livrosDisponiveis.add(livroDevolvido);
-        this.livrosEmprestados.remove(livroDevolvido);
-    } 
-    
-    //* Criar empréstimo
+    public void listarLivrosDisponiveis() {        
+        System.out.println("\n=-=-=-=- Livros Disponíveis =-=-=-=-");
+        for(Livro livro : this.livrosDisponiveis) System.out.format("ID: %d |\tNome: %s\n", livro.getId(), livro.getNome());
+        System.out.println();
+    }
+
+    public void listarLivrosEmprestados() {       
+        System.out.println("\n=-=-=-=- Livros Emprestados =-=-=-=-");
+        for(Livro livro : this.livrosEmprestados) System.out.format("ID: %d |\tNome: %s\n", livro.getId(), livro.getNome());
+        System.out.println();
+    }
 
     public void listarEmprestimos() {
-        
+
         System.out.println("=-=-=-=-=-=-= Empréstimos =-=-=-=-=-=-=\n");
-        for(Emprestimo emprestimo : this.emprestimos) {
+        for (Emprestimo emprestimo : this.emprestimos) {
             System.out.format("--------- Código do empréstimo: %d ---------\n", emprestimo.getId());
-            System.out.format("Receptor: %s\nTítulo do livro: %s\nAutor do livro: %s", 
+            System.out.format("Receptor: %s\nTítulo do livro: %s\nAutor do livro: %s",
                     emprestimo.getReceptor().getNome(), emprestimo.getLivro().getNome(),
                     emprestimo.getLivro().getAutor());
-            System.out.format("\nData do empréstimo: %s\nData de devolução: %s\n", 
+            System.out.format("\nData do empréstimo: %s\nData de devolução: %s\n",
                     emprestimo.getDataEmprestimo().verData(), emprestimo.getDataDevolucao().verData());
             System.out.format("-------------------------------------------\n\n");
         }
         System.out.println("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
     }
 
+    //* Criar empréstimo
+
     private Data definirDataDevolucao(Data dataEmprestimo) {        
         return Data.calcularIntervaloDias(dataEmprestimo, 7);        
     }
 
     private Livro encontrarLivro(Livro livroSolicitado) {
-        
         for (Livro livro : this.livrosDisponiveis) {
             if (livro.getNome().equalsIgnoreCase(livroSolicitado.getNome())) {
                 if (livro.getAutor().equalsIgnoreCase(livroSolicitado.getAutor())) {
@@ -163,9 +148,12 @@ public class Biblioteca {
                 }
             }
         }
-
         return null;
-
+    }
+    
+    private void moverLivroEmprestado(Livro livroEmprestimo) {
+        this.livrosEmprestados.add(livroEmprestimo);
+        this.livrosDisponiveis.remove(livroEmprestimo);
     }
 
     private void criarEmprestimo(Pessoa receptor, Livro livroSolicitado) {
@@ -192,7 +180,7 @@ public class Biblioteca {
         return livroEmprestimo;
     }
 
-    //* Fechar Empréstimo
+    //* Concluir Empréstimo
     
     private Pessoa validarReceptor(Pessoa receptor) {
         for (Emprestimo emprestimo : this.emprestimos) {
@@ -217,6 +205,11 @@ public class Biblioteca {
         }
         return null;
     }
+
+    private void moverLivroDevolvido(Livro livroDevolvido) {
+        this.livrosDisponiveis.add(livroDevolvido);
+        this.livrosEmprestados.remove(livroDevolvido);
+    } 
 
     private void removerEmprestimo(Pessoa receptor, Livro livroEmprestado) {
         for (Emprestimo emprestimo : this.emprestimos) {

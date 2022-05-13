@@ -38,6 +38,24 @@ public class Carro {
         return this.placa;
     }
     
+    public String getMotor() {
+        return this.motor;
+    }
+
+    public void setMotor(String motor) {
+        this.motor = motor;
+    }
+
+    public Set<Concerto> getHistoricoConcertos() {
+        return this.historicoConcertos;
+    }
+
+    public void setHistoricoConcertos(Set<Concerto> historicoConcertos) {
+        this.historicoConcertos = historicoConcertos;
+    }
+  
+    /** Métodos **/
+
     private String validarPlaca(String placa) {
 
         if (placa.length() != 7)
@@ -53,14 +71,6 @@ public class Carro {
             throw new Error("Número da placa inválido...");
 
     }
-    
-    public String getMotor() {
-        return this.motor;
-    }
-
-    public void setMotor(String motor) {
-        this.motor = motor;
-    }
 
     public Concerto getProblema(Concerto concertoTarget) {
         if (concertoTarget.getStatus().equalsIgnoreCase("Pendente")) {
@@ -74,16 +84,6 @@ public class Carro {
         return null;
 
     }
-
-    public Set<Concerto> getHistoricoConcertos() {
-        return this.historicoConcertos;
-    }
-
-    public void setHistoricoConcertos(Set<Concerto> historicoConcertos) {
-        this.historicoConcertos = historicoConcertos;
-    }
-  
-    /** Métodos **/
 
     public void addConcertoHistorico(Concerto concerto) {
         this.historicoConcertos.add(concerto);
