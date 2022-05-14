@@ -1,5 +1,6 @@
 package utils;
 
+import java.time.temporal.ChronoUnit;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
@@ -14,7 +15,7 @@ public class Data {
 
     public Data(int dia, int mes, int ano) {
 
-        if(verificarDataValida(dia, mes, ano)) {
+        if (verificarDataValida(dia, mes, ano)) {
             this.dia = dia;
             this.mes = mes;
             this.ano = ano;
@@ -23,7 +24,7 @@ public class Data {
             this.dia = 0;
             this.mes = 0;
             this.ano = 0;
-        } 
+        }
 
     }
 
@@ -41,19 +42,19 @@ public class Data {
         return this;
     }
 
-    public int getDia() { 
-        return this.dia; 
+    public int getDia() {
+        return this.dia;
     }
 
-    public int getMes() { 
-        return this.mes; 
+    public int getMes() {
+        return this.mes;
     }
 
     public int getAno() {
         return this.ano;
     }
-    
-    /** Setters **/    
+
+    /** Setters **/
 
     public void setDia(int dia) {
         this.dia = dia;
@@ -70,8 +71,9 @@ public class Data {
     /** Métodos **/
 
     /**
-     * Verifica se o dia, mês e ano da data passada correspondem aos critérios 
+     * Verifica se o dia, mês e ano da data passada correspondem aos critérios
      * de uma data válida.
+     * 
      * @param dia
      * @param mes
      * @param ano
@@ -92,35 +94,37 @@ public class Data {
             return true;
 
     }
-    
+
     /**
-     * Verifica se o dia, mês e ano da data passada correspondem aos critérios 
+     * Verifica se o dia, mês e ano da data passada correspondem aos critérios
      * de uma data válida.
+     * 
      * @param data
      * @return a própria data se for válida ou gera uma exceção caso contrário.
      */
     public static Data validarData(Data data) {
 
-
         if (!(verificarDiaValido(data.getDia(), data.getMes()))) {
             throw new Error("Dia da data passada inválido...");
         }
-        
+
         if (!(verificarMesValido(data.getDia(), data.getMes()))) {
             throw new Error("Mês da data passado inválido...");
-        } 
-        
+        }
+
         if (data.getAno() <= 0 || data.getAno() > 2500) {
             throw new Error("Ano da data passado deve ser maior que 0 e menor que 2500...");
-        } 
-        
+        }
+
         return data;
-        
+
     }
-    
+
     /**
-     * Verifica se o mês é maior que 0 e menor que 13 para corresponder aos meses válidos.
+     * Verifica se o mês é maior que 0 e menor que 13 para corresponder aos meses
+     * válidos.
      * Verifica se o mês passado possui 31 dias, caso o dia seja 31.
+     * 
      * @param dia
      * @param mes
      * @return true caso o mês seja válido, false caso contrário
@@ -139,8 +143,7 @@ public class Data {
                 }
             }
             return false;
-        }
-        else {
+        } else {
             return true;
         }
 
@@ -148,7 +151,9 @@ public class Data {
 
     /**
      * Verifica se o dia é maior que 0 e menor que 31.
-     * Verifica se o mês é fevereiro e se o dia passado é maior que 28 (número máximo).
+     * Verifica se o mês é fevereiro e se o dia passado é maior que 28 (número
+     * máximo).
+     * 
      * @param dia
      * @param mes
      * @return true caso o dia seja válido, false caso contrário
@@ -163,29 +168,30 @@ public class Data {
                 return true;
             }
             return false;
-        }
-        else {
-            return true;        
+        } else {
+            return true;
         }
     }
 
     /**
      * Obtém a data atual através da lib LocalDate.
+     * 
      * @return objeto Data interno correspondente
      */
-    public static Data obterDataAtual() {           
+    public static Data obterDataAtual() {
         LocalDate dataHoje = LocalDate.now();
         return new Data(dataHoje.getDayOfMonth(), dataHoje.getMonthValue(), dataHoje.getYear());
     }
 
     /**
-     * Calcula a data final após determinado número de dias através 
+     * Calcula a data final após determinado número de dias através
      * das libs Date e Calendar.
+     * 
      * @param data
      * @param nDias
      * @return data final
      */
-    public static Data calcularIntervaloDias(Data data, int nDias) {
+    public static Data adicionarIntervaloDias(Data data, int nDias) {
         final int corretor = 1;
 
         Date dataFinal = new Date(data.getAno(), data.getMes() - corretor, data.getDia());
@@ -197,7 +203,16 @@ public class Data {
 
         return new Data(dataFinal.getDate(), dataFinal.getMonth() + corretor, dataFinal.getYear());
     }
-    
+
+    public static int calcularIntervaloEntreDatas(Data data1, Data data2) {
+
+        LocalDate d1 = LocalDate.of(data1.getAno(), data1.getMes(), data1.getDia());
+        LocalDate d2 = LocalDate.of(data2.getAno(), data2.getMes(), data2.getDia());
+
+        return (int) ChronoUnit.DAYS.between(d1, d2);
+
+    }
+
     public String verData() {
         return String.format("%02d/%02d/%04d", this.dia, this.mes, this.ano);
     }

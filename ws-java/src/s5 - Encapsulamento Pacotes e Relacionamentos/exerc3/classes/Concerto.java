@@ -6,11 +6,11 @@ import java.util.Set;
 import java.util.HashSet;
 
 public class Concerto {
-    
+
     final private static String statusPendente = "Pendente";
     final private static String statusConcluido = "Concluído";
 
-    private static Set<Concerto> concertosConcluidos = new HashSet<Concerto>(); 
+    private static Set<Concerto> concertosConcluidos = new HashSet<Concerto>();
     private static Set<Concerto> concertosPendentes = new HashSet<Concerto>();
 
     final private Carro carro;
@@ -28,15 +28,16 @@ public class Concerto {
         this.proprietario = proprietario;
         this.descricaoProblema = descricaoProblema;
         this.dataSolicitacao = Data.obterDataAtual();
-        this.dataConclusao = Data.calcularIntervaloDias(dataSolicitacao, 14);
+        this.dataConclusao = Data.adicionarIntervaloDias(dataSolicitacao, 14);
         this.status = statusPendente;
 
         carro.addConcertoHistorico(this);
         concertosPendentes.add(this);
-    }    
+    }
 
     // Registro de concerto no histórico do carro (concluído)
-    public Concerto(Carro carro, Proprietario proprietario, String descricaoProblema, Data dataSolicitacao, Data dataConclusao) {
+    public Concerto(Carro carro, Proprietario proprietario, String descricaoProblema, Data dataSolicitacao,
+            Data dataConclusao) {
         this.carro = carro;
         this.proprietario = proprietario;
         this.descricaoProblema = descricaoProblema;
@@ -48,7 +49,7 @@ public class Concerto {
     }
 
     /** Getters e Setters **/
-    
+
     public Carro getCarro() {
         return this.carro;
     }
@@ -100,7 +101,7 @@ public class Concerto {
         }
         return null;
     }
-    
+
     public void resolver() {
 
         if (this.getStatus().equalsIgnoreCase("Concluído")) {
@@ -115,15 +116,15 @@ public class Concerto {
     }
 
     public static void listarConcertosConcluidos() {
-        
+
         if (concertosConcluidos.isEmpty()) {
             System.out.println("Nenhum concerto concluído está registrado...");
             return;
         }
-        
+
         System.out.println("\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-= Concertos Concluídos =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
         for (Concerto concerto : concertosPendentes) {
-           System.out.println("\nConcerto ------------------------------------------------------------------------");
+            System.out.println("\nConcerto ------------------------------------------------------------------------");
             System.out.format("Proprietário: %s\t| Carro: %s\t | Placa: %s\n",
                     concerto.getProprietario().getNome(), concerto.getCarro().getModelo(),
                     concerto.getCarro().getPlaca());
@@ -143,7 +144,7 @@ public class Concerto {
             System.out.println("Nenhum concerto pendente está registrado...");
             return;
         }
-        
+
         System.out.println("\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-= Concertos Pendentes =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
         for (Concerto concerto : concertosPendentes) {
             System.out.println("\nConcerto ------------------------------------------------------------------------");
@@ -157,9 +158,9 @@ public class Concerto {
             System.out.println("\n---------------------------------------------------------------------------------");
         }
         System.out.println("\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
-        
+
     }
-    
+
     public static void listarConcertos() {
 
         listarConcertosPendentes();
