@@ -1,3 +1,6 @@
 {
-  "java.project.sourcePaths": ["s2 - Exerc. Modo 1"]
+  "java.project.sourcePaths": [
+    "s2 - Exerc. Modo 1",
+    "ws-java/src/s2 - Exerc. Modo 1"
+  ]
 }
